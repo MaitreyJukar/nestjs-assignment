@@ -1,0 +1,8 @@
+{
+  "updates": [
+    { "id": 1, "name": "Updated Package 1" },
+    { "id": 2, "name": "Updated Package 2" }
+  ],
+  "inserts": [{ "name": "New Package 1" }, { "name": "New Package 2" }],
+  "deletions": [3, 4]
+}
