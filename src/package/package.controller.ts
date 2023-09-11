@@ -45,21 +45,27 @@ export class PackageController {
   }
 
   @Post('bulk')
-  bulkUpdate(@Body() bulkUpdateDto: BulkUpdateDto): Promise<Package[]> {
+  async bulkUpdate(@Body() bulkUpdateDto: BulkUpdateDto): Promise<Package[]> {
     if (bulkUpdateDto?.updates) {
-      for (let packageData of bulkUpdateDto.updates) {
-        this.packageService.update(packageData.package_id, packageData);
-      }
+      await Promise.all(
+        bulkUpdateDto.updates.map(async (packageData) => {
+          await this.packageService.update(packageData.package_id, packageData);
+        }),
+      );
     }
     if (bulkUpdateDto?.inserts) {
-      for (let packageData of bulkUpdateDto.inserts) {
-        this.packageService.create(packageData);
-      }
+      await Promise.all(
+        bulkUpdateDto.inserts.map(async (packageData) => {
+          await this.packageService.create(packageData);
+        }),
+      );
     }
     if (bulkUpdateDto?.deletions) {
-      for (let packageID of bulkUpdateDto.deletions) {
-        this.packageService.remove(packageID);
-      }
+      await Promise.all(
+        bulkUpdateDto.deletions.map(async (packageID) => {
+          await this.packageService.remove(packageID);
+        }),
+      );
     }
     return this.packageService.findAll();
   }
